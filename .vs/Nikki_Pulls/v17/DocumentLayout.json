@@ -1,0 +1,77 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\kuron\\source\\repos\\Nikki_Pulls\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{0C85350E-5DD5-412A-882B-7981F35B956F}|Nikki_Pulls\\Nikki_Pulls.csproj|c:\\users\\kuron\\source\\repos\\nikki_pulls\\nikki_pulls\\help.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{0C85350E-5DD5-412A-882B-7981F35B956F}|Nikki_Pulls\\Nikki_Pulls.csproj|solutionrelative:nikki_pulls\\help.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C85350E-5DD5-412A-882B-7981F35B956F}|Nikki_Pulls\\Nikki_Pulls.csproj|c:\\users\\kuron\\source\\repos\\nikki_pulls\\nikki_pulls\\help.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C85350E-5DD5-412A-882B-7981F35B956F}|Nikki_Pulls\\Nikki_Pulls.csproj|solutionrelative:nikki_pulls\\help.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 7,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e5c86464-96be-4d7c-9a8b-abcb3bbf5f92}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{e8b06f52-6d01-11d2-aa7d-00c04f990343}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Help.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\kuron\\source\\repos\\Nikki_Pulls\\Nikki_Pulls\\Help.xaml.cs",
+              "RelativeDocumentMoniker": "Nikki_Pulls\\Help.xaml.cs",
+              "ToolTip": "C:\\Users\\kuron\\source\\repos\\Nikki_Pulls\\Nikki_Pulls\\Help.xaml.cs",
+              "RelativeToolTip": "Nikki_Pulls\\Help.xaml.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAcwC0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-14T19:25:53.747Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Help.xaml",
+              "DocumentMoniker": "C:\\Users\\kuron\\source\\repos\\Nikki_Pulls\\Nikki_Pulls\\Help.xaml",
+              "RelativeDocumentMoniker": "Nikki_Pulls\\Help.xaml",
+              "ToolTip": "C:\\Users\\kuron\\source\\repos\\Nikki_Pulls\\Nikki_Pulls\\Help.xaml",
+              "RelativeToolTip": "Nikki_Pulls\\Help.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-06-14T19:24:17.781Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
