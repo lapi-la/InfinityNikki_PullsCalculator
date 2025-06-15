@@ -33,7 +33,7 @@ namespace Nikki_Pulls
             }
             else
             {
-                WBHelp.NavigateToString("<html><body><h2>No se encontró el archivo help.html</h2></body></html>");
+                WBHelp.NavigateToString("<html><body><h2>File not found help.html</h2></body></html>");
             }
         }
 

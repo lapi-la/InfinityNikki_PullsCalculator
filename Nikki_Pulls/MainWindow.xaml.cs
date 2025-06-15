@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml;
 
 namespace Nikki_Pulls;
 
@@ -49,9 +50,10 @@ public partial class MainWindow : Window
 
     private void btnMakePulls_Click(object sender, RoutedEventArgs e)
     {
+
         if (string.IsNullOrWhiteSpace(txtAmountPulling.Text) || cmbStars.SelectedIndex == -1)
         {
-            MessageBox.Show("Please select the number of pulls and the star rating.");  //Error messages if the user does not select the amount of pulls , the star rating or valid numbers also cmb valid star.
+            MessageBox.Show("Please select the number of pulls and the star rating.");
             return;
         }
 
@@ -61,118 +63,78 @@ public partial class MainWindow : Window
             return;
         }
 
-        if (!int.TryParse(cmbStars.SelectedItem?.ToString(), out int stars) || (stars < 3 || stars > 5))
+        if (!int.TryParse(cmbStars.SelectedItem?.ToString(), out int userInputStars) || userInputStars < 3 || userInputStars > 5)
         {
             MessageBox.Show("Please select a valid star amount (3, 4, or 5).");
             return;
         }
 
-        var xmlPath = "PullsData.xml"; // Where data is saved for the history of pulls.
-        var doc = new System.Xml.XmlDocument();
+        string xmlPath = "PullsData.xml";
+        var doc = new XmlDocument();
+
         try
         {
             doc.Load(xmlPath);
         }
-        catch (Exception ex)
+        catch
         {
-            MessageBox.Show($"Error loading the XML file: {ex.Message}");
-            return;
+            var root = doc.CreateElement("Pulls");
+            doc.AppendChild(root);
         }
 
-        int pullsSinceLast4 = 0;
-        int pullsSinceLast5 = 0;
-        int pullsToNext5After4 = -1; // This means theres no 4-star pity active
-
-        // Read Pity History 
+        // pity of last 5⭐ pulls
+        int pityCount = 0;
         var pulls = doc.SelectNodes("//Pull");
-        if (pulls != null)
+
+        if (pulls != null && pulls.Count > 0)
         {
             for (int i = pulls.Count - 1; i >= 0; i--)
             {
                 var pull = pulls[i];
-                var starsNode = pull.SelectSingleNode("Stars");
-                if (starsNode != null && int.TryParse(starsNode.InnerText, out int prevStars))
+                if (int.TryParse(pull.SelectSingleNode("Stars")?.InnerText, out int stars))
                 {
-                    if (prevStars == 5)
+                    if (stars == 5)
                     {
-                        pullsSinceLast5 = 0;
-                        pullsSinceLast4 = 0;
-                        pullsToNext5After4 = -1;
-                        break; // Pity Resets after 5 stars
+                        break;
                     }
-                    else
-                    {
-                        pullsSinceLast5++;
-                        if (prevStars == 4)
-                        {
-                            pullsSinceLast4 = 0;
-                            pullsToNext5After4 = 10; // after 4 stars there's a 5-star pity in 10 pulls
-                        }
-                        else
-                        {
-                            pullsSinceLast4++;
-                            if (pullsToNext5After4 > -1)
-                                pullsToNext5After4--;
-                        }
-                    }
+                    pityCount++;
                 }
             }
         }
 
+        
+        pityCount++; // start since the next pull will be the first after the last 5⭐
+
+        // count pulls since last 4⭐
+        int pullsSinceLast4 = 0;
+        for (int i = pulls.Count - 1; i >= 0; i--)
+        {
+            var pull = pulls[i];
+            if (int.TryParse(pull.SelectSingleNode("Stars")?.InnerText, out int stars))
+            {
+                if (stars == 4 || stars == 5)
+                    break;
+
+                pullsSinceLast4++;
+            }
+        }
+
+        // start pulls
         for (int i = 0; i < amount; i++)
         {
-            pullsSinceLast4++;
-            pullsSinceLast5++;
+            int pullStars = userInputStars;
 
-            int pullStars = stars;
-
-            // force 5 stars if pity conditions are met ( if user insert 4 stars manually )
-            if (pullsToNext5After4 == 0)
+            // Pity logic
+            if (pityCount >= 20)
             {
                 pullStars = 5;
-                pullsSinceLast5 = 0;
-                pullsSinceLast4 = 0;
-                pullsToNext5After4 = -1;
             }
-            // make sure 5 stars every 20 pulls
-            else if (pullsSinceLast5 >= 20)
-            {
-                pullStars = 5;
-                pullsSinceLast5 = 0;
-                pullsSinceLast4 = 0;
-                pullsToNext5After4 = -1;
-            }
-            // make sure 4 stars every 10 pulls
-            else if (pullsSinceLast4 >= 10)
+            else if (pullsSinceLast4 >= 9) // next 10 should be 4
             {
                 pullStars = 4;
-                pullsSinceLast4 = 0;
-                pullsToNext5After4 = 10; // after 4 stars, the next 5 stars will be in 10 pulls
-            }
-            // if user selects 3 stars but pity conditions are met , force 4 or 5 stars
-            else if (stars == 3)
-            {
-                if (pullsSinceLast5 == 20)
-                {
-                    pullStars = 5;
-                    pullsSinceLast5 = 0;
-                    pullsSinceLast4 = 0;
-                    pullsToNext5After4 = -1;
-                }
-                else if (pullsSinceLast4 == 10)
-                {
-                    pullStars = 4;
-                    pullsSinceLast4 = 0;
-                    pullsToNext5After4 = 10;
-                }
             }
 
-           //this are for the user if does stuff manually just in case.
-            if (stars == 4 && pullsToNext5After4 == -1)
-            {
-                pullsToNext5After4 = 10;
-            }
-
+            // make node xml
             var pullElem = doc.CreateElement("Pull");
 
             var starsElem = doc.CreateElement("Stars");
@@ -184,24 +146,39 @@ public partial class MainWindow : Window
             pullElem.AppendChild(dateElem);
 
             var pityElem = doc.CreateElement("Pity");
-            pityElem.InnerText = (i + 1).ToString();
+            pityElem.InnerText = pityCount.ToString();
             pullElem.AppendChild(pityElem);
 
             doc.DocumentElement.AppendChild(pullElem);
+
+            // update counters
+            if (pullStars == 5)
+            {
+                pityCount = 1;
+                pullsSinceLast4 = 0;
+            }
+            else
+            {
+                pityCount++;
+                if (pullStars == 4)
+                    pullsSinceLast4 = 0;
+                else
+                    pullsSinceLast4++;
+            }
         }
 
+        // save xml
         try
         {
             doc.Save(xmlPath);
-            MessageBox.Show("Pulls Correctly Saved.");
+            MessageBox.Show("Pulls correctly saved.");
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error loading the XML file:: {ex.Message}");
+            MessageBox.Show($"Error saving XML: {ex.Message}");
         }
     }
 
-  
 
     private void cmbItemsCount_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
